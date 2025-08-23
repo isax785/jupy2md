@@ -1,0 +1,23 @@
+.idea/
+__pycache__/
+.ipynb_checkpoints/
+.vscode/
+build
+
+# files
+desktop.ini
+tempCodeRunnerFile*
+
+# file types
+_pdf/*
+*.pdf
+*.lnk
+*.pem
+# *.c
+*.pyd
+*.so
+private_key.pem
+private_key.*
+
+# Specific folders
+/src
