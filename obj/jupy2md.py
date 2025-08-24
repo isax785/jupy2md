@@ -11,7 +11,7 @@ class Jupy2Md:
     IMG_FOLDER = "img_md"
     IMG_HTML = '<img align="center" width="90%" src="./{folder}/{filename}" alt="{alttext}">'
 
-    def __init__(self, filepath:str, settings={}):
+    def __init__(self, filepath:str, settings:dict={}):
         """
         - filepath: str, path of the .ipynb to be converted
         - settings: dict, default={}
