@@ -73,16 +73,18 @@ class MainWindow:
                 self.convert_to_md()
     
     def convert_to_md(self, export=False, export_folder=None):
-        print("DBG - conversion called!")
+        print("DBG - conversion called!") # DEBUG
         if self.filepath:
             settings = {"code": self.chkbx_code_var.get(),
                         "code_output": self.chbx_code_output_var.get(),
+                        "code_text": self.chbx_code_output_var.get(),
                         "code_images": self.chbx_img_var.get(),
                         "images": self.chbx_img_var.get(),
+                        "code_images": self.chbx_img_var.get(),
                         "export_folder": export_folder,
                         "export": export}
             self.md_text = Jupy2Md(self.filepath, settings=settings)
-            self._write_into_text(self.display_text, self.md_text)
+            self._write_into_text(self.display_text, self.md_text.text)
 
     def browse_download(self):
         folder = filedialog.askdirectory()
