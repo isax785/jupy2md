@@ -1,17 +1,19 @@
-# `Jupy2Md` Development Readme
+# Readme
 
-The class implementing the conversion can be used from:
+`Jupy2Md`  is a class implementing the conversion can be used from:
 
-- the dedicated GUI
-- command line
+- the dedicated GUI;
+- command line.
 
 **Tasks**
-- [ ] `#f` filepaths: absolute and relative
-- [ ] `#u` upgrade to `Jupy2Md` class
+
 - [ ] `#t` test `Jupy2Md` class
 - [ ] `#f` count `\n` - only at the **end** of each block
-- [ ] `#u` finalize `jupy2md` function usage (command line)
+- [ ] `#f` image links
 - done
+  - [x] `#u` finalize `jupy2md` function usage (command line)
+  - [x] `#f` filepaths: absolute and relative
+  - [x] `#u` upgrade to `Jupy2Md` class
   - [x] `#u` implement `Jupy2Md` class
   - [x] `#a` retrive programming language name from metadata  
   - [x] `#a` jupyter file with all the possible outputs for testing purposes
@@ -31,4 +33,12 @@ class MainWindow:
 
 ## Command Line
 
-`>>` to be fully tested (absolute and relative path)
+Convert via shell:
+
+```shell
+  python jupy2md.py jupyter_notebook_path.ipynb
+```
+
+The export folder will be located in the same directory of the jupyter notebook.
+
+The command can run from anywhere. It follows that the `jupy2md.py` file has to be properly located and provided with its complete relative path.

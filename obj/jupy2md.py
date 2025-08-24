@@ -47,17 +47,17 @@ class Jupy2Md:
         self.export_folder = settings.get("export_folder", None)
 
     def _define_names(self):
-        filename = self.filepath
+        filename_temp = self.filepath
         for split in SPLITS:
             if split in self.filepath:
-                filename = self.filepath.split(split)[-1]
+                filename_temp = self.filepath.split(split)[-1]
                 break
-        self.filename = filename[:len(".ipynb")]
+        self.filename = filename_temp[:-len(".ipynb")]
         
         if self.export_folder:
             self.folder_path = os.path.join(self.export_folder, self.filename)
         else:
-            self.folder_path = os.path.join(CWD, self.filename)
+            self.folder_path = os.path.join(self.filepath[:-len(filename_temp)], self.filename)
             
         self.img_path = os.path.join(self.folder_path, self.IMG_FOLDER)
         
@@ -148,4 +148,4 @@ class Jupy2Md:
 
 if __name__ == "__main__":
     import sys
-    Jupy2Md(sys.argv[1], export=True)
+    Jupy2Md(sys.argv[1], {"export":True})
