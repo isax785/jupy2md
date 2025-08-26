@@ -137,7 +137,7 @@ class Jupy2Md:
         with open(self.md_filepath, "w") as f:
             f.write(self.text)
 
-        if self.images_raw:
+        if self.images_raw: 
             os.makedirs(self.img_path, exist_ok=True)
             for ifname in self.images_raw:
                 self._decode_save_image(ifname)
