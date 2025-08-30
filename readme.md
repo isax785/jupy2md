@@ -22,26 +22,43 @@ The conversion is carried out by the `Jupy2Md` class that has three different us
 
 # `Jupy2Md` Class
 
-The class importing, converting, and exporting the `JN` file.
+The class importing, converting, and exporting the `JN` file. 
 
-- `__init__(self, filepath:str, settings:dict={})`: initialization of the class and conversion based on the provided settings.
+When instantiating the class, the conversion is done directly on the basis of the initialization settings, i.e. `settings` dictionary.
 
-```python
-    def __init__(self, filepath:str, settings={}):
-        """
-        - filepath: str, path of the .ipynb to be converted
-        - settings: dict, default={}
-            - "md_text": bool, default=True, markdown text
-            - "md_images": bool, default=True, images within markdown
-            - "code": bool, default=True, code blocks
-            - "code_output": bool, default=True, code printout
-            - "code_text": bool, default=True, code text
-            - "code_images": bool, default=True, code images 
-            - "export": bool, default=False, export (save) file and img
-            - "export_folder": str, default=None, export folder
-        """
+Once intantiated, the conevrsion can be repeated by executing the `.convert_to_md` method with new `settings` parameters.
+
+Main methods:
+
+- `def __init__(self, filepath:str, settings={})`: initialization and conversion.
+
+```text
+    - filepath: str, path of the .ipynb to be converted
+    - settings: dict, default={}
 ```
-- `def convert_to_md(self)`: the whole conversion happens here!
+- `def convert_to_md(self, settings=None)`: the whole conversion happens here!
+
+```text
+    - settings: dict, default=None
+```
+- `def export_md(self, export_folder=None)`: export the markdown file into the selected folder (conversion needed before export):
+
+```text
+    - export_folder: str, default=None
+```
+
+The dictionary `settings` of both methods allows defining the conversion options and accepts the following arguments:
+
+```text
+    - "md_text": bool, default=True, markdown text
+    - "md_images": bool, default=True, images within markdown
+    - "code": bool, default=True, code blocks
+    - "code_output": bool, default=True, code printout
+    - "code_text": bool, default=True, code text
+    - "code_images": bool, default=True, code images 
+    - "export": bool, default=False, export (save) file and img
+    - "export_folder": str, default=None, export folder
+```
 
 # GUI
 
