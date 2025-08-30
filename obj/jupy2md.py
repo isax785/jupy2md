@@ -36,7 +36,7 @@ class Jupy2Md:
         self.filepath = os.path.abspath(filepath)
         self.images_raw = {}
 
-    def _retrieve_settings(self, settings={}):
+    def _retrieve_settings(self, settings:dict={}):
         self.md_text = settings.get("md_text", True)
         self.md_images = settings.get("images", True)
         self.code = settings.get("code", True)
@@ -52,17 +52,22 @@ class Jupy2Md:
             if split in self.filepath:
                 filename_temp = self.filepath.split(split)[-1]
                 break
+        self.filename_with_ext = filename_temp
         self.filename = filename_temp[:-len(".ipynb")]
         
+    def _build_export_paths(self, export_folder=None):
+        if export_folder:
+            self.export_folder = os.path.abspath(export_folder)
         if self.export_folder:
             self.folder_path = os.path.join(self.export_folder, self.filename)
         else:
-            self.folder_path = os.path.join(self.filepath[:-len(filename_temp)], self.filename)
+            self.folder_path = os.path.join(self.filepath[:-len(self.filename_with_ext)], self.filename)
             
         self.img_path = os.path.join(self.folder_path, self.IMG_FOLDER)
         
         self.md_filename = self.filename+".md"
         self.md_filepath = os.path.join(self.folder_path, self.md_filename)
+        pass
 
     def _read_jupy(self):
         with open(self.filepath, 'r') as f:
@@ -76,7 +81,9 @@ class Jupy2Md:
         text += '\n```\n'
         return text
 
-    def convert_to_md(self):
+    def convert_to_md(self, settings=None):
+        if settings:
+            self._retrieve_settings(settings)
         self.text = ''
         img_k = 0
         for cell in self.json_raw['cells']:
@@ -132,7 +139,10 @@ class Jupy2Md:
         pattern = r'!\[([^\]]+)\]\(([^)]+\.\w+)\)'
         self.text = re.sub(pattern, '', self.text) # remove the pattern
 
-    def export_md(self):
+    def export_md(self, export_folder=None):
+        self._build_export_paths(export_folder=export_folder)
+        self.export = True
+
         os.makedirs(self.folder_path, exist_ok=True)
         with open(self.md_filepath, "w") as f:
             f.write(self.text)
