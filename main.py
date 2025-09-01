@@ -9,7 +9,9 @@ from tkinter.scrolledtext import ScrolledText
 import os
 
 CWD = os.path.dirname(__file__)
-
+IMG_LINK = {"Markdown": "",
+            "HTML": "",
+            "Wikilinks": ""}
 
 class MainWindow:
     def __init__(self):
@@ -70,21 +72,28 @@ class MainWindow:
                                        command=self.convert_to_md)
         self.chbx_img.grid(row=2, column=0, sticky="nw", padx=5)
 
+        # drop-down menu
+        tk.Label(self.checkboxes_frame, text="Image Link Style:").grid(row=3, column=0, sticky="nw", padx=5)
+        self.dropdown_var = tk.StringVar()
+        self.dropdown_menu = ttk.Combobox(self.checkboxes_frame, textvariable=self.dropdown_var, values=list(IMG_LINK.keys()), state="readonly")
+        self.dropdown_menu.grid(row=4, column=0, padx=5)
+        self.dropdown_menu.current(0)
+
         # display text
         self.display_text = ScrolledText(self.root, width=65, yscrollcommand=True)
-        self.display_text.grid(row=2, column=1, columnspan=3, rowspan=3, padx=10, pady=5, sticky="nsew")
+        self.display_text.grid(row=2, column=1, columnspan=3, padx=10, pady=5, sticky="nsew")
         self.display_text.grid_configure(sticky="nsew")
         self.display_text.grid_rowconfigure(0, weight=1)
         self.display_text.grid_columnconfigure(0, weight=1)
 
         # export button
-        tk.Button(self.root, text="Export", command=self.export_md).grid(row=5, column=1, columnspan=3, pady=5, padx=10, sticky='nsew')
+        tk.Button(self.root, text="Export", command=self.export_md).grid(row=3, column=1, columnspan=3, pady=5, padx=10, sticky='nsew')
 
         # status bar
         self.status_bar_text = tk.StringVar()
         self.status_bar_text.set("-")
         self.status_bar = tk.Label(self.root, textvariable=self.status_bar_text, anchor="w")
-        self.status_bar.grid(row=6, column=1, columnspan=3, pady=5, padx=10,sticky='nsew')
+        self.status_bar.grid(row=4, column=1, columnspan=3, pady=5, padx=10,sticky='nsew')
 
     def _write_statusbar(self, mess:str):
         self.status_bar_text.set(mess)
@@ -113,6 +122,7 @@ class MainWindow:
                     "code_images": self.chbx_img_var.get(),
                     "images": self.chbx_img_var.get(),
                     "code_images": self.chbx_img_var.get(),
+                    "img_link_style": self.dropdown_menu.get(),
                     "export": False,
                     "export_folder": False}
         return settings
