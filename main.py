@@ -78,13 +78,13 @@ class MainWindow:
         self.display_text.grid_columnconfigure(0, weight=1)
 
         # export button
-        tk.Button(self.root, text="Export", command=self.export_md).grid(row=5, column=0, columnspan=4, pady=5, padx=20, sticky='nsew')
+        tk.Button(self.root, text="Export", command=self.export_md).grid(row=5, column=1, columnspan=3, pady=5, padx=10, sticky='nsew')
 
         # status bar
         self.status_bar_text = tk.StringVar()
         self.status_bar_text.set("-")
         self.status_bar = tk.Label(self.root, textvariable=self.status_bar_text, anchor="w")
-        self.status_bar.grid(row=6, column=0, columnspan=4, pady=5, padx=20, sticky='nsew')
+        self.status_bar.grid(row=6, column=1, columnspan=3, pady=5, padx=10,sticky='nsew')
 
     def _write_statusbar(self, mess:str):
         self.status_bar_text.set(mess)
@@ -97,7 +97,7 @@ class MainWindow:
             extension = filepath.split('.')[-1]
             if extension != 'ipynb':
                 self.filename = None
-                self._write_into_text(self.display_text, "Please select a .ipynb file.")
+                self._write_statusbar("Please select a .ipynb file.")
             else:
                 settings = self.retrieve_settings()
                 self.md_text = Jupy2Md(self.filepath, settings=settings)
@@ -135,8 +135,7 @@ class MainWindow:
             try:
                 self.md_text.export = True
                 self.md_text.export_folder = self.folder_path
-                self._write_into_text(self.download_entry, 
-                                      "Export folder: " + os.path.join(self.folder_path, self.filename))
+                self._write_into_text(self.download_entry, self.folder_path)
             except Exception as e:
                 messagebox.showinfo("Error", e)
 
@@ -152,6 +151,7 @@ class MainWindow:
                 try:
                     self.md_text.export_md(export_folder=self.folder_path)
                     messagebox.showinfo("Export", "File exported successfully.")
+                    self._write_statusbar("Export folder: " + os.path.normpath(os.path.join(self.folder_path, self.filename)))
                 except Exception as e:
                     messagebox.showinfo("Error", e)
     

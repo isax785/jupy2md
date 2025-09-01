@@ -19,11 +19,11 @@
 - [ ] `#f` flags passed for conversion (check accurately)
 - [ ] `#a` additional flags to be evaluated
 - [ ] `#t` both Linux and Windows
-- [ ] `#a` status bar at the bottom: operations advices and errors
 - [ ] `#f` image linking: remove/include accurately
 - [ ] `#u` image linking format (html, markdown, wikilinks `[[]]`): select by drop-down menu
 - [ ] `#u` better aesthetics
 - done
+  - [x] `#a` status bar at the bottom: operations advices and errors
   - [x] `#f` chcekboxes properly stacked when changing window size -> added a frame 
   - [x] `#f` flag `Code Output` -> `Printout/Output`
   - [x] `#f` change window size by dragging
