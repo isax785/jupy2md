@@ -42,7 +42,6 @@ class MainWindow:
 
         # Download section
         tk.Button(self.root, text="Select Folder", command=self.browse_download).grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        self.download_entry = tk.Label(self.root, text="Select a destination folder", anchor="w")
         self.download_entry = tk.Text(self.root, height=2, width=55)
         self.download_entry.grid(row=1, column=1, columnspan=3, padx=10, pady=5)
         self.download_entry.grid_configure(sticky="nsew")
@@ -81,6 +80,15 @@ class MainWindow:
         # export button
         tk.Button(self.root, text="Export", command=self.export_md).grid(row=5, column=0, columnspan=4, pady=5, padx=20, sticky='nsew')
 
+        # status bar
+        self.status_bar_text = tk.StringVar()
+        self.status_bar_text.set("-")
+        self.status_bar = tk.Label(self.root, textvariable=self.status_bar_text, anchor="w")
+        self.status_bar.grid(row=6, column=0, columnspan=4, pady=5, padx=20, sticky='nsew')
+
+    def _write_statusbar(self, mess:str):
+        self.status_bar_text.set(mess)
+
     def browse_upload(self):
         filepath = filedialog.askopenfilename(defaultextension=".ipynb")
         if filepath:
@@ -96,6 +104,7 @@ class MainWindow:
                 self.filename = filepath.split("/")[-1].split('.')[0]
                 self._write_into_text(self.upload_entry, filepath)
                 self.convert_to_md()
+                self._write_statusbar("File Uploaded!")
 
     def retrieve_settings(self) -> dict:
         settings = {"code": self.chkbx_code_var.get(),
