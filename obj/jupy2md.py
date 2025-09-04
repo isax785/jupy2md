@@ -7,9 +7,12 @@ CWD = os.path.dirname(os.path.abspath(__file__))
 
 SPLITS = ['//', '/', "\\"]
 
+IMG_LINK = {"Markdown": '![](./{folder}/{filename})',
+            "HTML": '<img align="center" width="90%" src="./{folder}/{filename}" alt="{alttext}">',
+            "Wikilinks": "[[{filename}]]"}
+
 class Jupy2Md:
     IMG_FOLDER = "img_md"
-    IMG_HTML = '<img align="center" width="90%" src="./{folder}/{filename}" alt="{alttext}">'
 
     def __init__(self, filepath:str, settings:dict={}):
         """
@@ -22,6 +25,7 @@ class Jupy2Md:
             - "code_text": bool, default=True, code text
             - "code_images": bool, default=True, code images 
             - "export": bool, default=False, export (save) file and img
+            - "img_link": str, default='HTML', image linking style
             - "export_folder": str, default=None, export folder
         """
         self._initialize_attributes(filepath)
@@ -38,13 +42,16 @@ class Jupy2Md:
 
     def _retrieve_settings(self, settings:dict={}):
         self.md_text = settings.get("md_text", True)
-        self.md_images = settings.get("images", True)
+        self.md_images = settings.get("md_images", True)
         self.code = settings.get("code", True)
         self.code_output = settings.get("code_output", True)
         self.code_text = settings.get("code_text", True)
         self.code_images = settings.get("code_images", True)
         self.export = settings.get("export", False)
+        self.img_link = settings.get("img_link", "HTML")
         self.export_folder = settings.get("export_folder", None)
+
+        self.img_link_format = IMG_LINK[self.img_link]
 
     def _define_names(self):
         filename_temp = self.filepath
@@ -111,7 +118,8 @@ class Jupy2Md:
                                 self.images_raw[ifname] = s
                                 img_k += 1
 
-                                self.text += self.IMG_HTML.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname) 
+                                # self.text += self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname) 
+                                self.text += self.build_img_link(ifname)
                                 self.text += '\n'
 
 
@@ -131,13 +139,23 @@ class Jupy2Md:
                             self.images_raw[ifname] = s
                             img_k += 1
 
-                            self.text += self.IMG_HTML.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname)
+                            # self.text += self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname)
+                            self.text += self.build_img_link(ifname)
                             self.text += '\n'
 
         # Regex pattern to match ![sometext](file.extension)
         # FIXME: remove only when not necessary
-        pattern = r'!\[([^\]]+)\]\(([^)]+\.\w+)\)'
-        self.text = re.sub(pattern, '', self.text) # remove the pattern
+        # pattern = r'!\[([^\]]+)\]\(([^)]+\.\w+)\)'
+        # self.text = re.sub(pattern, '', self.text) # remove the pattern
+
+    def build_img_link(self, ifname):
+        if self.img_link == "Markdown":
+            return self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname)
+        if self.img_link == "HTML":
+            return self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname)
+        if self.img_link == "Wikilinks":
+            return self.img_link_format.format(filename=ifname)
+            
 
     def export_md(self, export_folder=None):
         self._build_export_paths(export_folder=export_folder)

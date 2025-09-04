@@ -9,9 +9,7 @@ from tkinter.scrolledtext import ScrolledText
 import os
 
 CWD = os.path.dirname(__file__)
-IMG_LINK = {"Markdown": "",
-            "HTML": "",
-            "Wikilinks": ""}
+IMG_LINK = ["Markdown", "HTML", "Wikilinks"]
 
 class MainWindow:
     def __init__(self):
@@ -41,6 +39,7 @@ class MainWindow:
         self.upload_entry.grid(row=0, column=1, columnspan=3, padx=10, pady=5)
         self.upload_entry.grid_configure(sticky="nsew")
         self.upload_entry.grid_rowconfigure(0, weight=1)
+        self.upload_entry.config(state=tk.DISABLED)
 
         # Download section
         tk.Button(self.root, text="Select Folder", command=self.browse_download).grid(row=1, column=0, padx=5, pady=5, sticky="e")
@@ -48,35 +47,49 @@ class MainWindow:
         self.download_entry.grid(row=1, column=1, columnspan=3, padx=10, pady=5)
         self.download_entry.grid_configure(sticky="nsew")
         self.download_entry.grid_rowconfigure(0, weight=1)
+        self.download_entry.config(state=tk.DISABLED)
 
         # checkboxes
         self.checkboxes_frame = tk.Frame(self.root)
         self.checkboxes_frame.grid(row=2, column=0, sticky="nw", padx=5)
 
+        self.chkbx_text_var = tk.BooleanVar(value=True)
+        self.chkbx_text = tk.Checkbutton(self.checkboxes_frame, text="Text", 
+                                         variable=self.chkbx_text_var,
+                                         command=self.convert_to_md)
+        self.chkbx_text.grid(row=0, column=0, sticky="nw", padx=5)
+
+        self.chkbx_text_img_var = tk.BooleanVar(value=True)
+        self.chkbx_text_img = tk.Checkbutton(self.checkboxes_frame, text="Text Images", 
+                                         variable=self.chkbx_text_img_var,
+                                         command=self.convert_to_md)
+        self.chkbx_text_img.grid(row=1, column=0, sticky="nw", padx=5)
+
         self.chkbx_code_var = tk.BooleanVar(value=True)
         self.chkbx_code = tk.Checkbutton(self.checkboxes_frame, text="Code", 
                                          variable=self.chkbx_code_var,
                                          command=self.convert_to_md)
-        self.chkbx_code.grid(row=0, column=0, sticky="nw", padx=5)
+        self.chkbx_code.grid(row=2, column=0, sticky="nw", padx=5)
 
         self.chbx_code_output_var = tk.BooleanVar(value=True)
         self.chbx_code_output = tk.Checkbutton(self.checkboxes_frame, 
                                                text="Printout/Output", 
                                                variable=self.chbx_code_output_var,
                                                command=self.convert_to_md)
-        self.chbx_code_output.grid(row=1, column=0, sticky="nw", padx=5)
+        self.chbx_code_output.grid(row=3, column=0, sticky="nw", padx=5)
 
-        self.chbx_img_var = tk.BooleanVar(value=True)
-        self.chbx_img = tk.Checkbutton(self.checkboxes_frame, text="Images", 
-                                       variable=self.chbx_img_var, 
+        self.chbx_code_img_var = tk.BooleanVar(value=True)
+        self.chbx_code_img = tk.Checkbutton(self.checkboxes_frame, text="Code Images", 
+                                       variable=self.chbx_code_img_var, 
                                        command=self.convert_to_md)
-        self.chbx_img.grid(row=2, column=0, sticky="nw", padx=5)
+        self.chbx_code_img.grid(row=4, column=0, sticky="nw", padx=5)
 
         # drop-down menu
-        tk.Label(self.checkboxes_frame, text="Image Link Style:").grid(row=3, column=0, sticky="nw", padx=5)
+        tk.Label(self.checkboxes_frame, text="Image Link Style:").grid(row=5, column=0, sticky="nw", padx=5)
         self.dropdown_var = tk.StringVar()
-        self.dropdown_menu = ttk.Combobox(self.checkboxes_frame, textvariable=self.dropdown_var, values=list(IMG_LINK.keys()), state="readonly")
-        self.dropdown_menu.grid(row=4, column=0, padx=5)
+        self.dropdown_menu = ttk.Combobox(self.checkboxes_frame, textvariable=self.dropdown_var, values=IMG_LINK, state="readonly")
+        self.dropdown_menu.bind("<<ComboboxSelected>>", self.convert_to_md)
+        self.dropdown_menu.grid(row=6, column=0, padx=5)
         self.dropdown_menu.current(0)
 
         # display text
@@ -85,6 +98,7 @@ class MainWindow:
         self.display_text.grid_configure(sticky="nsew")
         self.display_text.grid_rowconfigure(0, weight=1)
         self.display_text.grid_columnconfigure(0, weight=1)
+        self.display_text .config(state=tk.DISABLED)
 
         # export button
         tk.Button(self.root, text="Export", command=self.export_md).grid(row=3, column=1, columnspan=3, pady=5, padx=10, sticky='nsew')
@@ -116,25 +130,27 @@ class MainWindow:
                 self._write_statusbar("File Uploaded!")
 
     def retrieve_settings(self) -> dict:
-        settings = {"code": self.chkbx_code_var.get(),
+        settings = {"md_text": self.chkbx_text_var.get(),
+                    "md_images": self.chkbx_text_img_var.get(),
+                    "code": self.chkbx_code_var.get(),
                     "code_output": self.chbx_code_output_var.get(),
                     "code_text": self.chbx_code_output_var.get(),
-                    "code_images": self.chbx_img_var.get(),
-                    "images": self.chbx_img_var.get(),
-                    "code_images": self.chbx_img_var.get(),
-                    "img_link_style": self.dropdown_menu.get(),
+                    "code_images": self.chbx_code_img_var.get(),
                     "export": False,
+                    "img_link": self.dropdown_menu.get(),
                     "export_folder": False}
         return settings
     
     def convert_to_md(self, export=False, export_folder=None):
-        print("DBG - conversion called!") # DEBUG
         if self.filepath:
             settings = self.retrieve_settings()
             settings.update({"export_folder": export_folder,
                              "export": export})
             self.md_text.convert_to_md(settings)
             self._write_into_text(self.display_text, self.md_text.text)
+            self._write_statusbar("Jupyter Notebook converted!")
+        else:
+            self._write_statusbar("Select a Jupyter Notebook first!")
 
     def browse_download(self):
         folder = filedialog.askdirectory()
