@@ -4,7 +4,7 @@
 
 - [ ] `#u` complete documentation
 - [ ] `#t` test `Jupy2Md` class
-- [ ] `#f` image links
+- [ ] `#f` image links removal
 - done
   - [x] `#f` count `\n` - only at the **end** of each block
   - [x] `#u` finalize `jupy2md` function usage (command line)
@@ -16,13 +16,15 @@
 
 **GUI** 
 
-- [ ] `#f` flags passed for conversion (check accurately)
-- [ ] `#a` additional flags to be evaluated
 - [ ] `#t` both Linux and Windows
 - [ ] `#f` image linking: remove/include accurately
-- [ ] `#u` image linking format (html, markdown, wikilinks `[[]]`): select by drop-down menu
-- [ ] `#u` better aesthetics
+- [ ] `#f` theme not working properly
+- [ ] `#a` menu bar for light and dark theme
 - done
+  - [x] `#u` better aesthetics -> theme added, to be fixed
+  - [x] `#f` flags passed for conversion (check accurately)
+  - [x] `#a` additional flags to be evaluated -> added
+  - [x] `#u` image linking format (html, markdown, wikilinks `[[]]`): select by drop-down menu
   - [x] `#a` status bar at the bottom: operations advices and errors
   - [x] `#f` chcekboxes properly stacked when changing window size -> added a frame 
   - [x] `#f` flag `Code Output` -> `Printout/Output`

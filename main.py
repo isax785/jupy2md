@@ -10,13 +10,15 @@ import os
 
 CWD = os.path.dirname(__file__)
 IMG_LINK = ["Markdown", "HTML", "Wikilinks"]
+STYLING = False
 
 class MainWindow:
     def __init__(self):
         self.root = tk.Tk()
         self.initialization()
-        self.set_style()
         self.add_components()
+        if STYLING:
+            self.set_style()
         self.md_text = None
         # self.set_menu_bar()
     
@@ -27,10 +29,12 @@ class MainWindow:
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.filepath = None
-    
+
     def set_style(self):
-        self.style = ttk.Style(self.root)
-        self.style.theme_use("default")
+        theme_filepath = os.path.normpath(os.path.join(CWD, './res/azure/azure.tcl'))
+        self.root.tk.call('source', theme_filepath)
+        self.root.tk.call("set_theme", "dark")
+        self.root.update()
 
     def add_components(self):
         # Upload file for conversion
@@ -84,7 +88,7 @@ class MainWindow:
                                        command=self.convert_to_md)
         self.chbx_code_img.grid(row=4, column=0, sticky="nw", padx=5)
 
-        # drop-down menu
+        # drop-down menu - combobox
         tk.Label(self.checkboxes_frame, text="Image Link Style:").grid(row=5, column=0, sticky="nw", padx=5)
         self.dropdown_var = tk.StringVar()
         self.dropdown_menu = ttk.Combobox(self.checkboxes_frame, textvariable=self.dropdown_var, values=IMG_LINK, state="readonly")
@@ -190,4 +194,9 @@ class MainWindow:
 
 if __name__ == "__main__":
     window = MainWindow()
+    # # theme_filepath = os.path.normpath(os.path.join(CWD, './res/azure/azure.tcl'))
+    # theme_filepath = os.path.normpath(os.path.join(CWD, 'azure.tcl'))
+    # print(theme_filepath)
+    # window.root.tk.call('source', theme_filepath)
+    # window.root.tk.call("set_theme", "dark")
     window.root.mainloop()

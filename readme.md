@@ -17,6 +17,7 @@ The conversion is carried out by the `Jupy2Md` class that has three different us
 - [`Jupy2Md` Class](#jupy2md-class)
 - [GUI](#gui)
 - [Command Line](#command-line)
+- [Credits](#credits)
 
 ---
 
@@ -100,3 +101,7 @@ Command:
 The command can run from anywhere. It follows that the `jupy2md.py` file has to be properly located and provided with its complete relative path.
 
 The `JN` filepath can be both *absolute* and *relative*.
+
+# Credits
+
+Thanks to [oldium](https://github.com/oldium) for the amazing [Azure Theme](https://github.com/rdbende/Azure-ttk-theme).
