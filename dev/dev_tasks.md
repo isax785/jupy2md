@@ -2,9 +2,9 @@
 
 **Class**
 
+- [ ] `#f` image links removal
 - [ ] `#u` complete documentation
 - [ ] `#t` test `Jupy2Md` class
-- [ ] `#f` image links removal
 - done
   - [x] `#f` count `\n` - only at the **end** of each block
   - [x] `#u` finalize `jupy2md` function usage (command line)
@@ -16,11 +16,10 @@
 
 **GUI** 
 
-- [ ] `#t` both Linux and Windows
-- [ ] `#f` image linking: remove/include accurately
-- [ ] `#f` theme not working properly
-- [ ] `#a` menu bar for light and dark theme
+- [ ] `#t` working properly on both Linux and Windows
 - done
+  - [x] `#a` menu bar option for light and dark theme -> switch added
+  - [x] `#f` theme not working properly -> fixed (use `ttk`!!!)
   - [x] `#u` better aesthetics -> theme added, to be fixed
   - [x] `#f` flags passed for conversion (check accurately)
   - [x] `#a` additional flags to be evaluated -> added
