@@ -10,7 +10,7 @@ import os
 
 CWD = os.path.dirname(__file__)
 IMG_LINK = ["Markdown", "HTML", "Wikilinks"]
-STYLING = False
+STYLING = True
 
 class MainWindow:
     def __init__(self):

@@ -289,7 +289,7 @@ if __name__ == "__main__":
     import os
     cwd = os.path.dirname(__file__)
     root = tk.Tk()
-    root.title("")
+    root.title("Azure Theme Example")
 
     # Simply set the theme\
     print("Theme Source Path:", os.path.join(cwd, "azure.tcl"))
