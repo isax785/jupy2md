@@ -152,7 +152,7 @@ class MainWindow:
                     "md_images": self.chkbx_text_img_var.get(),
                     "code": self.chkbx_code_var.get(),
                     "code_output": self.chbx_code_output_var.get(),
-                    "code_text": self.chbx_code_text_var.get(),
+                    "code_text": self.chbx_code_output_var.get(),
                     "code_images": self.chbx_code_img_var.get(),
                     "export": False,
                     "img_link": self.dropdown_menu.get(),
