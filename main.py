@@ -30,6 +30,7 @@ class MainWindow:
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.filepath = None
+        self.export_folder = None
 
     def set_style(self):
         theme_filepath = os.path.normpath(os.path.join(CWD, './res/azure/azure.tcl'))
@@ -173,11 +174,11 @@ class MainWindow:
     def browse_download(self):
         folder = filedialog.askdirectory()
         if folder:
-            self.folder_path = folder
+            self.export_folder = folder
             try:
                 self.md_text.export = True
-                self.md_text.export_folder = self.folder_path
-                self._write_into_text(self.download_entry, self.folder_path)
+                self.md_text.export_folder = self.export_folder
+                self._write_into_text(self.download_entry, self.export_folder)
             except Exception as e:
                 messagebox.showinfo("Error", e)
 
@@ -186,13 +187,13 @@ class MainWindow:
             print("select a file")
             messagebox.showerror("Export", "Select a Jupyter Notebook.")
         else:
-            if not self.md_text.export_folder:
+            if not self.export_folder:
                 messagebox.showerror("Export", "Select a folder for export.")
             else:
                 try:
-                    self.md_text.export_md(export_folder=self.folder_path)
+                    self.md_text.export_md(export_folder=self.export_folder)
                     messagebox.showinfo("Export", "File exported successfully.")
-                    self._write_statusbar("Export folder: " + os.path.normpath(os.path.join(self.folder_path, self.filename)))
+                    self._write_statusbar("Export folder: " + os.path.normpath(os.path.join(self.export_folder, self.filename)))
                 except Exception as e:
                     messagebox.showinfo("Error", e)
     
