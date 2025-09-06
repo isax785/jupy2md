@@ -18,6 +18,7 @@
 
 - [ ] `#t` check it is working properly on both Linux and Windows
 - done
+  - [x] `#u` messagebox position, central to main window
   - [x] `#a` menu bar option for light and dark theme -> switch added
   - [x] `#f` theme not working properly -> fixed (use `ttk`!!!)
   - [x] `#u` better aesthetics -> theme added, to be fixed

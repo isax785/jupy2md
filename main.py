@@ -1,11 +1,9 @@
-# from jupy2md import jupy2md
 from obj.jupy2md import Jupy2Md
 
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import filedialog, messagebox, Text, ACTIVE, DISABLED
+from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
-# from obj.code_tree import FileCodeTree
 import os
 
 CWD = os.path.dirname(__file__)
@@ -14,6 +12,8 @@ STYLING = True
 THEMES = ["light", "dark"]
 
 class MainWindow:
+    MIN_W = 600  # minimum width
+    MIN_H = 400  # minimum height
     def __init__(self):
         self.root = tk.Tk()
         self.initialization()
@@ -26,7 +26,7 @@ class MainWindow:
     def initialization(self):
         self.root.title("Jupy2Md Converter")
         self.root.iconbitmap(os.path.join(CWD, './res/jupy2md01.ico'))
-        self.root.minsize(600, 400)
+        self.root.minsize(self.MIN_W, self.MIN_H)
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.filepath = None
@@ -180,23 +180,53 @@ class MainWindow:
                 self.md_text.export_folder = self.export_folder
                 self._write_into_text(self.download_entry, self.export_folder)
             except Exception as e:
-                messagebox.showinfo("Error", e)
+                self.messagebox_centered("Error", e)
 
     def export_md(self):
         if not self.md_text:
-            print("select a file")
-            messagebox.showerror("Export", "Select a Jupyter Notebook.")
+            self.messagebox_centered("Export", "Select a Jupyter Notebook.")
         else:
             if not self.export_folder:
-                messagebox.showerror("Export", "Select a folder for export.")
+                self.messagebox_centered("Export", "Select a folder for export.")
             else:
                 try:
                     self.md_text.export_md(export_folder=self.export_folder)
-                    messagebox.showinfo("Export", "File exported successfully.")
+                    self.messagebox_centered("Export", "File exported successfully.")
                     self._write_statusbar("Export folder: " + os.path.normpath(os.path.join(self.export_folder, self.filename)))
                 except Exception as e:
-                    messagebox.showinfo("Error", e)
-    
+                    self.messagebox_centered("Error", e)
+
+    def messagebox_centered(self, title, message):
+        " top-level window to display messages "
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title)
+        dialog.iconbitmap(os.path.join(CWD, './res/jupy2md01.ico'))
+        dialog.resizable(False, False)
+
+        main_w = self.root.winfo_width()
+        main_h = self.root.winfo_height()
+        main_x = self.root.winfo_x()
+        main_y = self.root.winfo_y()
+
+        dialog_w = int(self.MIN_W / 2.5)
+        dialog_h = int(self.MIN_H / 4)
+        
+        pos_x = main_x + (main_w // 2) - (dialog_w // 2)
+        pos_y = main_y + (main_h // 2) - (dialog_h // 2)
+
+        dialog.geometry(f'{dialog_w}x{dialog_h}+{pos_x}+{pos_y}')
+
+        label = ttk.Label(dialog, text=message, padding=10)
+        label.pack(expand=True, fill='both')
+
+        close_button = ttk.Button(dialog, text="OK", command=dialog.destroy)
+        close_button.pack(pady=10)
+
+        # Make the dialog a modal window (blocks the main window)
+        dialog.transient(self.root)
+        dialog.grab_set()
+        self.root.wait_window(dialog)
+        self.root.update()
 
     def _write_into_text(self, cell, text):
         cell.config(state="normal")
