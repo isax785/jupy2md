@@ -7,9 +7,9 @@ CWD = os.path.dirname(os.path.abspath(__file__))
 
 SPLITS = ['//', '/', "\\"]
 
-IMG_LINK = {"Markdown": '![](./{folder}/{filename})',
-            "HTML": '<img align="center" width="90%" src="./{folder}/{filename}" alt="{alttext}">',
-            "Wikilinks": "[[{filename}]]"}
+IMG_LINK = {"Markdown": '![](./{folder}/{filename})\n',
+            "HTML": '<img align="center" width="90%" src="./{folder}/{filename}" alt="{alttext}">\n',
+            "Wikilinks": "[[{filename}]]\n"}
 
 class Jupy2Md:
     IMG_FOLDER = "img_md"
@@ -118,35 +118,34 @@ class Jupy2Md:
                                 self.images_raw[ifname] = s
                                 img_k += 1
 
-                                # self.text += self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname) 
                                 self.text += self.build_img_link(ifname)
                                 self.text += '\n'
 
-
             # markdown block
             elif cell['cell_type'] == 'markdown':
-                # get content of markdown
-                if self.md_text:
-                    # self.text += '\n'
-                    self.text += ''.join(e for e in cell['source'])
-                    self.text += '\n'
-
+                # get markdown embedded images
+                img_embedded_names = None
                 if "attachments" in cell:
+                    img_embedded_names = {im:"" for im in cell["attachments"].keys()}
                     if self.md_images:
-                        if "image.png" in cell["attachments"]:
-                            s = cell["attachments"]["image.png"]["image/png"]
+                        for img_e_n in img_embedded_names:
+                            s = cell["attachments"][img_e_n]["image/png"]
                             ifname = f'image{img_k}.png'
                             self.images_raw[ifname] = s
+                            img_embedded_names[img_e_n] = ifname
                             img_k += 1
 
-                            # self.text += self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname)
-                            self.text += self.build_img_link(ifname)
-                            self.text += '\n'
+                # get content of markdown
+                if self.md_text:
+                    text = ''.join(e for e in cell['source'])
+                    if img_embedded_names:
+                        " img links are replaced here "
+                        for img_e_n in img_embedded_names:
+                            replacement = self.build_img_link(img_embedded_names[img_e_n]) if self.md_images else "\n"
+                            pattern = re.escape(f"![{img_e_n}](attachment:{(img_e_n)})\n")
+                            text = re.sub(pattern, replacement, text)
 
-        # Regex pattern to match ![sometext](file.extension)
-        # FIXME: remove only when not necessary
-        # pattern = r'!\[([^\]]+)\]\(([^)]+\.\w+)\)'
-        # self.text = re.sub(pattern, '', self.text) # remove the pattern
+                    self.text += text + '\n'
 
     def build_img_link(self, ifname):
         if self.img_link == "Markdown":
@@ -155,7 +154,6 @@ class Jupy2Md:
             return self.img_link_format.format(folder=self.IMG_FOLDER, filename=ifname, alttext=ifname)
         if self.img_link == "Wikilinks":
             return self.img_link_format.format(filename=ifname)
-            
 
     def export_md(self, export_folder=None):
         self._build_export_paths(export_folder=export_folder)

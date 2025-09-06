@@ -2,10 +2,10 @@
 
 **Class**
 
-- [ ] `#f` image links removal
 - [ ] `#u` complete documentation
 - [ ] `#t` test `Jupy2Md` class
 - done
+  - [x] `#f` image links removal - the **links of embedded images** must be replaced with the links to the image folder
   - [x] `#f` count `\n` - only at the **end** of each block
   - [x] `#u` finalize `jupy2md` function usage (command line)
   - [x] `#f` filepaths: absolute and relative
@@ -16,7 +16,7 @@
 
 **GUI** 
 
-- [ ] `#t` working properly on both Linux and Windows
+- [ ] `#t` check it is working properly on both Linux and Windows
 - done
   - [x] `#a` menu bar option for light and dark theme -> switch added
   - [x] `#f` theme not working properly -> fixed (use `ttk`!!!)
